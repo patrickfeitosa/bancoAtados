@@ -37,8 +37,46 @@ app.get('/saque/:number/:pass/:valor', function (req, res) {
 
 				//Setando novo valor atual da conta;
 				element.current_balance = newBalance;
-				res.json(element);
-				res.send('teste');
+
+				//Variaveis para quantidades de nota
+				var qtdCem = 0, qtdCinquenta = 0, qtdVinte = 0, qtdDez = 0, qtdCinco = 0, qtdDois = 0;
+				var calcVal;
+
+				calcVal = valor;
+				do {
+					if (calcVal % 100 == 0) {
+						qtdCem++;
+						calcVal = calcVal - 100;
+					} else if (calcVal % 50 == 0) {
+						qtdCinquenta++;
+						calcVal = calcVal - 50;
+					} else if (calcVal % 20 == 0) {
+						qtdVinte++;
+						calcVal = calcVal - 20;
+					} else if (calcVal % 10 == 0) {
+						qtdDez++;
+						calcVal = calcVal - 10;
+					} else if (calcVal % 5 == 0) {
+						qtdCinco++;
+						calcVal = calcVal - 5;
+					} else if (calcVal % 2 == 0) {
+						qtdDois++;
+						calcVal = calcVal - 2;
+					}
+				} while (calcVal > 0);
+ 
+				var saqueInformation = [
+					{
+						mensagem: 'Saque no valor de R$ ' + valor + ' realizado com sucesso',
+						Quantidade_Cem: qtdCem,
+						Quantidade_Cinquenta: qtdCinquenta,
+						Quantidade_Vinte: qtdVinte,
+						Quantidade_Dez: qtdDez,
+						Quantidade_Cinco: qtdCinco,
+						Quantidade_Dois: qtdDois
+					}
+				]
+				res.json(saqueInformation);
 			} else {
 				res.send('Saldo insuficiente para Saque');
 			}
